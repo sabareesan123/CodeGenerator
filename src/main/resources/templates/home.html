@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">Login</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" id="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!--    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!--<script src="webjars/jquery/1.9.1/jquery.min.js"></script>
+<script src="webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>-->
+    <script>
+		
+		function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
+    }
+    return "";
+} 
+        $(document).ready(function() {
+            $('#loginForm').submit(function(e) {
+                e.preventDefault();
+              
+                var username = $('#username').val();
+                var password = $('#password').val();
+   alert(username);
+               jQuery.ajax({
+                    url: 'http://localhost:8080/auth/generateToken',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ username: username, password: password }),
+                    success: function(data,textStatus,jqXHR) {
+						alert('54 home')
+						    var cookieHeader = getCookie("jwt");
+						    alert("jwt " + cookieHeader)
+						    //jqXHR.getResponseHeader('jwt');
+						  //  alert(cookieHeader)
+						     document.cookie = cookieHeader;
+                console.log('Cookie stored:', cookieHeader);
+                
+						 alert("success " + jqXHR.getAllResponseHeaders.length)
+						  window.location.href = 'http://localhost:8080/dashboard';
+          /*  if (cookieHeader) {
+				alert('57 cookie')
+                // Step 3: Store the cookie in the browser
+                document.cookie = cookieHeader;
+                console.log('Cookie stored:', cookieHeader);
+						 alert("success " + data)
+                      
+
+                        // Store the token in browser's local storage
+                       // localStorage.setItem('jwtToken', token);
+
+                       window.location.href = 'http://localhost:8080/dashboard';
+
+                        // Store the token in browser's local storage
+                        localStorage.setItem('jwtToken', data);
+                           //  window.location.href = 'http://localhost:8080/dashboard';
+                    }*/
+                    },
+                    error: function() {
+                        alert('Authentication failed. Please check your username and password.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

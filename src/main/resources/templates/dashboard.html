@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Code and Table Generator Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+     <style>
+     .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+       </style>
+   <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!--    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+		$(document).ready(function() {
+			
+			alert("hello")
+    // Make the API call
+          $('#logoutBtn').click(function(){
+                // Make the REST call
+                $.ajax({
+                    url: 'http://localhost:8080/auth/logout',
+                    type: 'GET',
+                    success: function(data) {
+                        // Redirect on success
+                        window.location.href = 'http://localhost:8080/home';
+                    },
+                    error: function(error) {
+                        console.error('Error:', error);
+                        // Handle error if needed
+                    }
+                });
+            });
+    jQuery.ajax({
+        url: 'http://localhost:8080/classes',
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+			alert("success")
+            // Populate the table
+            var tableBody = $('#parkingLotTable tbody');
+            $.each(response, function(index, classes) {
+                var row = '<tr>' +
+                            '<td>' + classes.id + '</td>' +
+                            '<td>' + classes.name + '</td>' +
+                            '<td>' + classes.fields + '</td>' +
+                            '<td>' + classes.methods + '</td>' +
+                           
+                         
+                          '</tr>';
+                          
+                                         
+                tableBody.append(row);
+            });
+                      // Handle click event for Enter button
+    $('.enter').click(function() {
+		 var buttonId = $(this).attr('id');
+        $.ajax({
+            url: 'http://localhost:8080/classes/search' + buttonId,
+            type: 'GET',
+            success: function() {
+                alert('Search request made');
+            },
+            error: function() {
+                alert('Search request failed');
+            }
+        });
+    });
+
+    // Handle click event for Exit button
+    $('.exit').click(function() {
+		 var buttonId = $(this).attr('id');
+        $.ajax({
+            url: 'http://localhost:8080/classes/filter' + buttonId,
+            type: 'GET',
+            success: function() {
+                alert('filter request made');
+            },
+            error: function() {
+                alert('filter request failed');
+            }
+        });
+    });
+
+        },
+        error: function(error) {
+            console.log('Error:', error);
+        }
+    });
+});
+		
+		
+			</script>	  <!--   '<td> <button class="enter" id = "'+ classes.id + '">delete</button></td>' +
+                              '<td><button class="exit" id = "'+ classes.id + '">Esci</button></td>' +   <th>Current State</th> -->
+</head>
+<body>
+    <div class="container">
+	
+     
+        <h1 class="mt-5 text-center">Classes</h1>
+             <!-- Logout Button -->
+    <button id="logoutBtn" class="btn btn-danger logout-button">Logout</button>
+        <table id="classesTable" class="table mt-4">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Fields</th>
+                    <th>Methods</th>
+                  
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be populated here -->
+            </tbody>
+        </table>
+    </div>
+
+<!--    <script src="script.js"></script>
+<script src="webjars/jquery/1.9.1/jquery.min.js"></script>
+<script src="webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" th:src="@{script.js}"></script> -->
+</body>
+</html>
